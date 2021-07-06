@@ -5,12 +5,12 @@ double **cria(int n) {
     //Função que cria uma matriz simetrica n x n
     //Essa função também deve inicializar todos os elementos com 0
     //Retono: ponteiro para a matriz 
-    double **m = malloc(n*sizeof(double));;
+    double **m = malloc(n*sizeof(double *));;
 
     for(int i = 0; i < n; i++){
-        m[i] = calloc(n, n*sizeof(double));
+        m[i] = calloc((i+1), sizeof(double));
     }
-
+    
     return m;
 }
 
@@ -20,12 +20,15 @@ void modifica(double **m, int i, int j, int n, double valor){
     //um elemento que não esteja explicitamente alocado
     //Verifique se i e j são válidos. Caso não sejam, imprima uma 
     // mensagem de erro.
-    for(i = 0; i < n; i++){
-        for(j = 0; j < n; j++){
-            scanf("%lf", &valor);
-            m[i][j] = valor;
-        }
-        printf("\n");
+    if (i >= n || j >= n){
+        printf("posicao invalida");
+        return;
+    }
+    if (i >= j){
+        m[i][j] = valor;
+    }
+    else{
+        m[j][i] = valor;
     }
 }
 
