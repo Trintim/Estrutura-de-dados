@@ -1,13 +1,5 @@
-Qauntidade de funcionarios:--- Funcionario 1 ---
-Codigo: Quantidade de dias trabalhados: 
---- Funcionario 2 ---
-Codigo: Quantidade de dias trabalhados: 
---- Funcionario 3 ---
-Codigo: Quantidade de dias trabalhados: 
---- Relatorio Final ---
-Funcionario - Horas Trabalhadas - Salario
-    1111    -      34         -  R$850.00
-    2222    -      16         -  R$400.00
-    3333    -      80         -  R$2000.00
-
-Total pago aos Funcionarios: R$3250.00
+2 3 4 1 
+1 3 5 11 
+2 4 6 8 
+3 5 7 9 
+4 6 8 10 
