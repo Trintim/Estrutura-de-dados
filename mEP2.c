@@ -7,7 +7,7 @@ int main(){
     long int **B;
     int i, j;
     long int n;
-    int pos = 1;
+    int cont = 1;
 
     scanf("%ld", &n);
 
@@ -40,12 +40,12 @@ int main(){
     }
 
     for (i = 0; i < n; i++){
-        if(p[i] == pos && pos <= n){
+        if(p[i] == cont && cont <= n){
             for(j = 0; j < n; j++){
                 printf("%ld ", B[i][j]);
             }
             printf("\n");
-            pos++;
+            cont++;
             i=-1;
         }
     }
