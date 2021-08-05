@@ -49,7 +49,7 @@ void liberaLista(Lista *l) {
     l = NULL; 
 }
 
-int vazia(Lista *l){
+int listaVazia(Lista *l){
     return l->inicio == NULL;
 }
 
@@ -62,8 +62,22 @@ int tamanhoLista(Lista *l){
         t++;
         aux = aux->proximo;
     }
-    
-    
+    return t;
+}
+
+No *primeiroElementoLista(Lista *l){
+    //Complexidade: O(n);
+    return l->inicio;
+}
+
+No *ultimoElementoLista(Lista *l){
+    if(listaVazia(l)) return NULL;
+    No *aux = l->inicio;
+    while (aux->proximo != NULL)
+    {
+        aux=aux->proximo;
+    }
+    return aux;
 }
 
 int main() {
@@ -76,6 +90,12 @@ int main() {
 
     imprimeLista(l);
     printf("%d\n", tamanhoLista(l));
+
+    insereInicio(l, 11);
+    printf("%d\n", tamanhoLista(l));
+
+    
+
 
     liberaLista(l);
 
