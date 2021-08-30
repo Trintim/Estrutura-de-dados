@@ -95,10 +95,10 @@ Objeto *avaliaExpressao(Lista *expressao) {
                     cont += no1->proximo->item.vInt;
                 }
                 else{
-                    cont += no1->proximo->item.vFloat;
                     if (no1->proximo->tipo == FLOAT){
                         resultado->tipo = FLOAT;
                     }
+                    cont += no1->proximo->item.vFloat;
                 }
             }
             else{
@@ -109,10 +109,10 @@ Objeto *avaliaExpressao(Lista *expressao) {
                     cont -= no1->proximo->item.vInt;
                 }
                 else{
-                    cont -= no1->proximo->item.vFloat;
                     if (no1->proximo->tipo == FLOAT){
                         resultado->tipo = FLOAT;
                     }
+                    cont -= no1->proximo->item.vFloat;
                 }
             }
         }
