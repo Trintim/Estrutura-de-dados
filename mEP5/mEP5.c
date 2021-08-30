@@ -74,19 +74,56 @@ bool expressaoValida(Lista *expressao) {
 Objeto *avaliaExpressao(Lista *expressao) {
     Objeto *resultado = criaObjeto();
 
-    Objeto *no1 = NULL;
+    Objeto *no1 = getPrimeiro(expressao);;
     double cont = 0;
-    no1 = getPrimeiro(expressao);
 
     if(no1->tipo == INT){
         cont += no1->item.vInt;
-        resultado->item.vInt = cont;
         resultado->tipo = INT;
     }
     else if(no1->tipo == FLOAT){
         cont += no1->item.vFloat;
-        resultado->item.vFloat = cont;
         resultado->tipo = FLOAT;
+    }
+    while(no1){
+        if(no1->tipo == STR){
+            if(strcmp(no1->item.vString, "+") == 0){
+                if(no1->proximo->tipo == INT){
+                    if(resultado->tipo == INDEFINIDO){
+                        resultado->tipo = INT;
+                    }
+                    cont += no1->proximo->item.vInt;
+                }
+                else{
+                    cont += no1->proximo->item.vFloat;
+                    if (no1->proximo->tipo == FLOAT){
+                        resultado->tipo = FLOAT;
+                    }
+                }
+            }
+            else{
+                if(no1->proximo->tipo == INT){
+                    if (resultado->tipo == INDEFINIDO){
+                        resultado->tipo = INT;
+                    }
+                    cont -= no1->proximo->item.vInt;
+                }
+                else{
+                    cont -= no1->proximo->item.vFloat;
+                    if (no1->proximo->tipo == FLOAT){
+                        resultado->tipo = FLOAT;
+                    }
+                }
+            }
+        }
+        no1 = no1->proximo;
+    }
+
+    if (resultado->tipo == FLOAT){
+        resultado->item.vFloat = cont;
+    }
+    else if(resultado->tipo == INT){
+        resultado->item.vInt = cont;
     }
 
     return resultado;
