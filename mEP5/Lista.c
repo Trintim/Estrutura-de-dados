@@ -12,8 +12,8 @@ struct lista {
 /**
  * @brief Faz alocação de memória para a lista
  * Complexidade: O(1)
- * 
- * @return Lista* 
+ *
+ * @return Lista*
  */
 Lista *criaLista() {
     Lista *lista = malloc(sizeof(Lista));
@@ -26,27 +26,27 @@ Lista *criaLista() {
 /**
  * @brief Faz a liberação de memória dinamicamente alocada por cada objeto da lista
  * Complexidade: O(n)
- * 
- * @param lista: ponteiro da lista a ser desalocada 
+ *
+ * @param lista: ponteiro da lista a ser desalocada
  */
 void liberaLista(Lista* lista) {
     if (lista == NULL)
         return;
     Objeto* atual = lista->inicio;
     while (atual != NULL) {
-        Objeto* t = atual->proximo; 
+        Objeto* t = atual->proximo;
         liberaObjeto(atual);
-        atual = t;              
+        atual = t;
     }
     free(lista);
     lista = NULL;
 }
 
 /**
- * @brief Insere um novo objeto no *fim* da lista 
+ * @brief Insere um novo objeto no *fim* da lista
  * Complexidade: O(1)
- * 
- * @param lista: ponteiro da lista 
+ *
+ * @param lista: ponteiro da lista
  * @param elem: ponteiro do objeto a ser inserido
  */
 void insereLista(Lista *lista, Objeto *elem) {
@@ -67,7 +67,7 @@ void insereLista(Lista *lista, Objeto *elem) {
  * @brief Função de alta ordem que imprime cada objeto da lista de acordo com
  * a função 'imprimeObjeto' (passada como parâmetro).
  * Complexidade: O(n)
- * 
+ *
  * @param lista: ponteiro da lista
  * @param imprimeObjeto: ponteiro da função utilizada para imprimir cada objeto
  */
@@ -84,7 +84,7 @@ void imprimeLista(Lista *lista, void (*imprimeObjeto)(Objeto *)){
 /**
  * @brief Retorna true se a lista estiver vazia e false, caso contrário
  * Complexidade: O(1)
- * 
+ *
  * @param lista: ponteiro da lista
  * @return true ou false
  */
@@ -97,9 +97,9 @@ bool listaVazia(Lista *lista){
 /**
  * @brief Retorna o número de elementos da lista
  * Complexidade: O(1)
- * 
+ *
  * @param lista: ponteiro da lista
- * @return int 
+ * @return int
  */
 int tamanhoLista(Lista *lista){
     if (lista == NULL)
@@ -110,12 +110,12 @@ int tamanhoLista(Lista *lista){
 /**
  * @brief Retorna um ponteiro para o primeiro elemento da lista
  * Complexidade: O(1)
- * 
- * @param lista: ponteiro da lista 
- * @return Objeto* 
+ *
+ * @param lista: ponteiro da lista
+ * @return Objeto*
  */
 Objeto *getPrimeiro(Lista *lista) {
-    if (lista == NULL) 
+    if (lista == NULL)
         return NULL;
     return lista->inicio;
 }
