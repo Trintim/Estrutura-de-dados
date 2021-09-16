@@ -51,7 +51,7 @@ void liberaFila(Fila *fila) {
  */
 void enqueue(Fila *fila, Objeto *objeto) {
 
-   if (fila->inicio == NULL){
+    if (fila->inicio == NULL){
         fila->inicio = fila->fim = objeto;
     }
     else{

@@ -34,10 +34,8 @@ void liberaPilha(Pilha *pilha) {
         Objeto* no = noAtual;
         noAtual = noAtual->proximo;
         liberaObjeto(no);
-        no = NULL;
     }
     free(pilha);
-    pilha = NULL;
 }
 
 /**
@@ -71,7 +69,6 @@ void desempilha(Pilha *pilha){
     Objeto *no = pilha->inicio;
     pilha->inicio = pilha->inicio->proximo;
     liberaObjeto(no);
-    no = NULL;
     pilha->n--;
 }
 
