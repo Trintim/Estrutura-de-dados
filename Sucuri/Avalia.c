@@ -19,24 +19,23 @@
  * Ao final (quando a fila estiver vazia), retorne o objeto (ou uma cópia) do topo da pilha.
  *
  * @param posFixa Fila com os objeto em notação pos-fixa
- * @return Objeto*
- */
+ * @return Objeto * */
 Objeto *avalia(Fila *posFixa) {
     //AVISO(Avalia.c: ainda não completei a função 'avalia');
-    Pilha *aux = criaPilha();
+    Pilha *entrada = criaPilha();
     while (!filaVazia(posFixa))
     {
         if (front(posFixa)->categoria == INT || front(posFixa)->categoria == FLOAT){
-            empilha(aux, copiaObjeto(front(posFixa)));
+            empilha(entrada, copiaObjeto(front(posFixa)));
         }
         else{
             switch (front(posFixa)->categoria)
             {
             case OPER_EXPONENCIACAO:;
-                Objeto* y = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                Objeto* x = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
+                Objeto *y = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                Objeto *x = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
                 if (y->categoria == FLOAT){
                     if(x->categoria == FLOAT){
                         x->valor.vFloat = pow(x->valor.vFloat, y->valor.vFloat);
@@ -52,148 +51,148 @@ Objeto *avalia(Fila *posFixa) {
                 else{
                     x->valor.vInt = pow(x->valor.vInt, y->valor.vInt);
                 }
-                empilha(aux, copiaObjeto(x));
+                empilha(entrada, copiaObjeto(x));
                 liberaObjeto(x);
                 liberaObjeto(y);
                 break;
 
             case OPER_ADICAO:;
-                Objeto* somaY = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                Objeto* somaX = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                if (somaY->categoria == FLOAT){
-                    if(somaX->categoria == FLOAT){
-                        somaX->valor.vFloat = somaX->valor.vFloat + somaY->valor.vFloat;
+                Objeto *soma1 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                Objeto *soma2 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                if (soma1->categoria == FLOAT){
+                    if(soma2->categoria == FLOAT){
+                        soma2->valor.vFloat = soma2->valor.vFloat + soma1->valor.vFloat;
                     }
                     else{
-                        somaX->valor.vFloat = somaX->valor.vInt + somaY->valor.vFloat;
-                        somaX->categoria = FLOAT;
+                        soma2->valor.vFloat = soma2->valor.vInt + soma1->valor.vFloat;
+                        soma2->categoria = FLOAT;
                     }
                 }
-                else if(somaX->categoria == FLOAT){
-                    somaX->valor.vFloat = somaX->valor.vFloat + somaY->valor.vInt;
+                else if(soma2->categoria == FLOAT){
+                    soma2->valor.vFloat = soma2->valor.vFloat + soma1->valor.vInt;
                 }
                 else{
-                    somaX->valor.vInt = somaX->valor.vInt + somaY->valor.vInt;
+                    soma2->valor.vInt = soma2->valor.vInt + soma1->valor.vInt;
                 }
-                empilha(aux, copiaObjeto(somaX));
-                liberaObjeto(somaX);
-                liberaObjeto(somaY);
+                empilha(entrada, copiaObjeto(soma2));
+                liberaObjeto(soma2);
+                liberaObjeto(soma1);
                 break;
             case OPER_SUBTRACAO:;
-                Objeto* subY = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                Objeto* subX = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                if (subY->categoria == FLOAT){
-                    if(subX->categoria == FLOAT){
-                        subX->valor.vFloat = subX->valor.vFloat - subY->valor.vFloat;
+                Objeto *subtrai1 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                Objeto *subtrai2 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                if (subtrai1->categoria == FLOAT){
+                    if(subtrai2->categoria == FLOAT){
+                        subtrai2->valor.vFloat = subtrai2->valor.vFloat - subtrai1->valor.vFloat;
                     }
                     else{
-                        subX->valor.vFloat = subX->valor.vInt - subY->valor.vFloat;
-                        subX->categoria = FLOAT;
+                        subtrai2->valor.vFloat = subtrai2->valor.vInt - subtrai1->valor.vFloat;
+                        subtrai2->categoria = FLOAT;
                     }
                 }
-                else if(subX->categoria == FLOAT){
-                    subX->valor.vFloat = subX->valor.vFloat - subY->valor.vInt;
+                else if(subtrai2->categoria == FLOAT){
+                    subtrai2->valor.vFloat = subtrai2->valor.vFloat - subtrai1->valor.vInt;
                 }
                 else{
-                    subX->valor.vInt = subX->valor.vInt - subY->valor.vInt;
+                    subtrai2->valor.vInt = subtrai2->valor.vInt - subtrai1->valor.vInt;
                 }
-                empilha(aux, copiaObjeto(subX));
-                liberaObjeto(subX);
-                liberaObjeto(subY);
+                empilha(entrada, copiaObjeto(subtrai2));
+                liberaObjeto(subtrai2);
+                liberaObjeto(subtrai1);
                 break;
             case OPER_MULTIPLICACAO:;
-                Objeto* multY = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                Objeto* multX = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                if (multY->categoria == FLOAT){
-                    if(multX->categoria == FLOAT){
-                        multX->valor.vFloat = multX->valor.vFloat * multY->valor.vFloat;
+                Objeto *multiplica1 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                Objeto *multiplica2 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                if (multiplica1->categoria == FLOAT){
+                    if(multiplica2->categoria == FLOAT){
+                        multiplica2->valor.vFloat = multiplica2->valor.vFloat * multiplica1->valor.vFloat;
                     }
                     else{
-                        multX->valor.vFloat = multX->valor.vInt * multY->valor.vFloat;
-                        multX->categoria = FLOAT;
+                        multiplica2->valor.vFloat = multiplica2->valor.vInt * multiplica1->valor.vFloat;
+                        multiplica2->categoria = FLOAT;
                     }
                 }
-                else if(multX->categoria == FLOAT){
-                    multX->valor.vFloat = multX->valor.vFloat * multY->valor.vInt;
+                else if(multiplica2->categoria == FLOAT){
+                    multiplica2->valor.vFloat = multiplica2->valor.vFloat * multiplica1->valor.vInt;
                 }
                 else{
-                    multX->valor.vInt = multX->valor.vInt * multY->valor.vInt;
+                    multiplica2->valor.vInt = multiplica2->valor.vInt * multiplica1->valor.vInt;
                 }
-                empilha(aux, copiaObjeto(multX));
-                liberaObjeto(multX);
-                liberaObjeto(multY);
+                empilha(entrada, copiaObjeto(multiplica2));
+                liberaObjeto(multiplica2);
+                liberaObjeto(multiplica1);
                 break;
             case OPER_DIVISAO:;
-                Objeto* divY = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                Objeto* divX = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                if (divY->categoria == FLOAT){
-                    if(divX->categoria == FLOAT){
-                        divX->valor.vFloat = divX->valor.vFloat / divY->valor.vFloat;
+                Objeto *divide1 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                Objeto *divide2 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                if (divide1->categoria == FLOAT){
+                    if(divide2->categoria == FLOAT){
+                        divide2->valor.vFloat = divide2->valor.vFloat / divide1->valor.vFloat;
                     }
                     else{
-                        divX->valor.vFloat = divX->valor.vInt / divY->valor.vFloat;
-                        divX->categoria = FLOAT;
+                        divide2->valor.vFloat = divide2->valor.vInt / divide1->valor.vFloat;
+                        divide2->categoria = FLOAT;
                     }
                 }
-                else if(divX->categoria == FLOAT){
-                    divX->valor.vFloat = divX->valor.vFloat / divY->valor.vInt;
+                else if(divide2->categoria == FLOAT){
+                    divide2->valor.vFloat = divide2->valor.vFloat / divide1->valor.vInt;
                 }
                 else{
-                    divX->valor.vInt = divX->valor.vInt / divY->valor.vInt;
+                    divide2->valor.vInt = divide2->valor.vInt / divide1->valor.vInt;
                 }
-                empilha(aux, copiaObjeto(divX));
-                liberaObjeto(divX);
-                liberaObjeto(divY);
+                empilha(entrada, copiaObjeto(divide2));
+                liberaObjeto(divide2);
+                liberaObjeto(divide1);
                 break;
             case OPER_RESTO_DIVISAO:;
-                Objeto* divRestoY = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                Objeto* divRestoX = copiaObjeto(topoPilha(aux));
-                desempilha(aux);
-                if (divRestoY->categoria == FLOAT){
-                    if(divRestoX->categoria == FLOAT){
-                        divRestoX->valor.vFloat = fabs(divRestoX->valor.vFloat - divRestoY->valor.vFloat);
+                Objeto *resto1 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                Objeto *resto2 = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                if (resto1->categoria == FLOAT){
+                    if(resto2->categoria == FLOAT){
+                        resto2->valor.vFloat = fabs(resto2->valor.vFloat - resto1->valor.vFloat);
                     }
                     else{
-                        divRestoX->valor.vFloat = fabs(divRestoX->valor.vInt - divRestoY->valor.vFloat);
-                        divRestoX->categoria = FLOAT;
+                        resto2->valor.vFloat = fabs(resto2->valor.vInt - resto1->valor.vFloat);
+                        resto2->categoria = FLOAT;
                     }
                 }
-                else if(divRestoX->categoria == FLOAT){
-                    divRestoX->valor.vFloat = fabs(divRestoX->valor.vFloat - divRestoY->valor.vInt);
+                else if(resto2->categoria == FLOAT){
+                    resto2->valor.vFloat = fabs(resto2->valor.vFloat - resto1->valor.vInt);
                 }
                 else{
-                    divRestoX->valor.vInt = divRestoX->valor.vInt % divRestoY->valor.vInt;
+                    resto2->valor.vInt = resto2->valor.vInt % resto1->valor.vInt;
                 }
-                empilha(aux, copiaObjeto(divRestoX));
-                liberaObjeto(divRestoX);
-                liberaObjeto(divRestoY);
+                empilha(entrada, copiaObjeto(resto2));
+                liberaObjeto(resto2);
+                liberaObjeto(resto1);
                 break;
             case OPER_MENOS_UNARIO:;
-            Objeto* uniX = copiaObjeto(topoPilha(aux));
-            desempilha(aux);
-            if (uniX->categoria == FLOAT)
-                uniX->valor.vFloat = -uniX->valor.vFloat;
-            else
-                uniX->valor.vInt = -uniX->valor.vInt;
-            empilha(aux, copiaObjeto(uniX));
-            liberaObjeto(uniX);
-            break;
-            default:
+                Objeto *menosUnitario = copiaObjeto(topoPilha(entrada));
+                desempilha(entrada);
+                if (menosUnitario->categoria == FLOAT)
+                    menosUnitario->valor.vFloat = -menosUnitario->valor.vFloat;
+                else
+                    menosUnitario->valor.vInt = -menosUnitario->valor.vInt;
+                empilha(entrada, copiaObjeto(menosUnitario));
+                liberaObjeto(menosUnitario);
+                break;
+                default:
                 break;
             }
         }
         dequeue(posFixa);
     }
-    Objeto *cpy = copiaObjeto(topoPilha(aux));
-    liberaPilha(aux);
-    return cpy;
+    Objeto *copia = copiaObjeto(topoPilha(entrada));
+    liberaPilha(entrada);
+    return copia;
 }

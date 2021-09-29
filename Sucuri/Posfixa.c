@@ -7,7 +7,7 @@
 /**
  * @brief Converte uma fila de objetos em notação infixa em notação pós-fixa.
  * Pseudo-código (retirado do PDF do EP):
- * - Crie uma pilha vazia para manter os operadoresEntrada.
+ * - Crie uma pilha vazia para manter os operadores.
  * - Crie uma fila vazia para a saída.
  * - Examine cada objeto da fila infixa e se o objeto for:
  *   - um operando (FLOAT ou INT), coloque-o na fila de saída.
@@ -15,7 +15,7 @@
  *   - um fecha parênteses (FECHA_PARENTESES), remova os objetos da pilha até
  *     que o abre parêntese correspondente seja removido. Coloque cada operador
  *     removido na fila de saída.
- *   - um operador insira-o na pilha. Entretanto, remova antes os operadoresEntrada que
+ *   - um operador insira-o na pilha. Entretanto, remova antes os operadores que
  *     estão na pilha que têm precedência maior ou igual ao operador encontrado e
  *     coloque-os na fila de saída. Lembre-se que o campo valor de um objeto que
  *     armazena um operador contém o valor da sua precedência (quanto maior esse
@@ -36,58 +36,59 @@
  */
 Fila *infixaParaPosfixa(Fila *infixa) {
 
-    Pilha *operadoresEntrada = criaPilha();
     Fila *saida = criaFila();
+    Pilha *entradaOperadores = criaPilha();
+    while (!filaVazia(infixa)){
 
-    while(!filaVazia(infixa)){
-
-        if (front(infixa)->categoria == FLOAT || front(infixa)->categoria == INT){
+        if (front(infixa)->categoria == INT || front(infixa)->categoria == FLOAT){
             enqueue(saida, copiaObjeto(front(infixa)));
         }
         else if(front(infixa)->categoria == ABRE_PARENTESES){
-            empilha(operadoresEntrada, copiaObjeto(front(infixa)));
+            empilha(entradaOperadores, copiaObjeto(front(infixa)));
         }
         else if(front(infixa)->categoria == FECHA_PARENTESES){
-            while (!pilhaVazia(operadoresEntrada) && topoPilha(operadoresEntrada)->categoria != ABRE_PARENTESES){
-                enqueue(saida, copiaObjeto(topoPilha(operadoresEntrada)));
-                desempilha(operadoresEntrada);
+            while (!pilhaVazia(entradaOperadores) && topoPilha(entradaOperadores)->categoria != ABRE_PARENTESES)
+            {
+                enqueue(saida, copiaObjeto(topoPilha(entradaOperadores)));
+                desempilha(entradaOperadores);
 
             }
-            desempilha(operadoresEntrada);
+            desempilha(entradaOperadores);
         }
         else{
             if (front(infixa)->categoria == OPER_EXPONENCIACAO || front(infixa)->categoria == OPER_MENOS_UNARIO){
-                    empilha(operadoresEntrada, copiaObjeto(front(infixa)));
+                    empilha(entradaOperadores, copiaObjeto(front(infixa)));
             }
             else{
-                while (!pilhaVazia(operadoresEntrada))
+                while (!pilhaVazia(entradaOperadores))
                 {
-                    if(topoPilha(operadoresEntrada)->valor.vInt >= front(infixa)->valor.vInt){
-                        enqueue(saida, copiaObjeto(topoPilha(operadoresEntrada)));
-                        desempilha(operadoresEntrada);
+                    if(topoPilha(entradaOperadores)->valor.vInt >= front(infixa)->valor.vInt){
+                        enqueue(saida, copiaObjeto(topoPilha(entradaOperadores)));
+                        desempilha(entradaOperadores);
                     }
                     else{
                         break;
                     }
                 }
-                empilha(operadoresEntrada, copiaObjeto(front(infixa)));
+                empilha(entradaOperadores, copiaObjeto(front(infixa)));
             }
+
         }
         dequeue(infixa);
     }
-    while (!pilhaVazia(operadoresEntrada))
+    while (!pilhaVazia(entradaOperadores))
     {
-        enqueue(saida, copiaObjeto(topoPilha(operadoresEntrada)));
-        desempilha(operadoresEntrada);
+        enqueue(saida, copiaObjeto(topoPilha(entradaOperadores)));
+        desempilha(entradaOperadores);
     }
-    liberaPilha(operadoresEntrada);
+    liberaPilha(entradaOperadores);
     return saida;
 }
 
 /**
  * @brief Imprime a fila de objeto em notação pós-fixa
  *
- * @param posfixa Fila com os objeto que se seja imprimir
+ * @param posfixa Fila com os objeto que se deseja imprimir
  */
 void imprimePosFixa(Fila *posfixa) {
     //Como temos que desempilhar (ou seja, os elementos serão apagados)
