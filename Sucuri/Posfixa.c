@@ -36,59 +36,50 @@
  */
 Fila *infixaParaPosfixa(Fila *infixa) {
 
-    Pilha* operadoresEntrada = criaPilha();
-    Fila* saida = criaFila();
+    Pilha *operadoresEntrada = criaPilha();
+    Fila *saida = criaFila();
 
-    while(tamanhoFila(infixa)){
-        Objeto* atualInfixa = front(infixa);
-        if (atualInfixa->categoria == FLOAT || atualInfixa->categoria == INT){
+    while(!filaVazia(infixa)){
 
-            enqueue(saida, copiaObjeto(atualInfixa));
+        if (front(infixa)->categoria == FLOAT || front(infixa)->categoria == INT){
+            enqueue(saida, copiaObjeto(front(infixa)));
         }
-        else if (atualInfixa->categoria == ABRE_PARENTESES){
-            empilha(operadoresEntrada, copiaObjeto(atualInfixa));
+        else if(front(infixa)->categoria == ABRE_PARENTESES){
+            empilha(operadoresEntrada, copiaObjeto(front(infixa)));
         }
-        else if (atualInfixa->categoria == FECHA_PARENTESES){
-
-            while(1){
-                Objeto* operador = topoPilha(operadoresEntrada);
-                if (operador->categoria == ABRE_PARENTESES){
-                    desempilha(operadoresEntrada);
-                    break;
-                }
-
-                enqueue(saida, copiaObjeto(operador));
+        else if(front(infixa)->categoria == FECHA_PARENTESES){
+            while (!pilhaVazia(operadoresEntrada) && topoPilha(operadoresEntrada)->categoria != ABRE_PARENTESES){
+                enqueue(saida, copiaObjeto(topoPilha(operadoresEntrada)));
                 desempilha(operadoresEntrada);
+
             }
-        }
-
-        else if(atualInfixa->categoria == 0 || atualInfixa->categoria == 6){
-
-            empilha(operadoresEntrada, copiaObjeto(atualInfixa));
+            desempilha(operadoresEntrada);
         }
         else{
-
-            while(1){
-
-                Objeto* operador = topoPilha(operadoresEntrada);
-                if (operador == NULL || operador->valor.vInt < atualInfixa->valor.vInt){
-                    break;
-                }
-
-                enqueue(saida, copiaObjeto(operador));
-                desempilha(operadoresEntrada);
+            if (front(infixa)->categoria == OPER_EXPONENCIACAO || front(infixa)->categoria == OPER_MENOS_UNARIO){
+                    empilha(operadoresEntrada, copiaObjeto(front(infixa)));
             }
-            empilha(operadoresEntrada, copiaObjeto(atualInfixa));
+            else{
+                while (!pilhaVazia(operadoresEntrada))
+                {
+                    if(topoPilha(operadoresEntrada)->valor.vInt >= front(infixa)->valor.vInt){
+                        enqueue(saida, copiaObjeto(topoPilha(operadoresEntrada)));
+                        desempilha(operadoresEntrada);
+                    }
+                    else{
+                        break;
+                    }
+                }
+                empilha(operadoresEntrada, copiaObjeto(front(infixa)));
+            }
         }
         dequeue(infixa);
     }
-    while(tamanhoPilha(operadoresEntrada)){
-
-        Objeto* operador = topoPilha(operadoresEntrada);
-        enqueue(saida, copiaObjeto(operador));
+    while (!pilhaVazia(operadoresEntrada))
+    {
+        enqueue(saida, copiaObjeto(topoPilha(operadoresEntrada)));
         desempilha(operadoresEntrada);
     }
-
     liberaPilha(operadoresEntrada);
     return saida;
 }
