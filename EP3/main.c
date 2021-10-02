@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <sys/time.h>
+#include <time.h>
+#include <math.h>
 
 #include "Util.h"
+#include "ArvoreAVL.h"
+#include "Fila.h"
 
 /* Número máximo de caracteres em uma linha */
 #define TAM_MAX_LINHA 1024
@@ -56,34 +63,45 @@ int main(int argc, char *argv[]) {
     /**
      * Tarefa 0: Crie a árvore binária de busca que será utilizada
      *           para armazenar as palávras do dicionário.
-     * 
+     *
      * Para essa parte você pode optar por:
-     * 
-     * 1) criar um único TAD que gerencia a árvore binária. A função de 
+     *
+     * 1) criar um único TAD que gerencia a árvore binária. A função de
      *    criação/inicialização recebe um parâmetro que indica se a árvore
-     *    é ou não balanceada. Internamente no TAD, você decide se precisa/deve 
+     *    é ou não balanceada. Internamente no TAD, você decide se precisa/deve
      *    ou não fazer o balanceamento quando uma nova palavra for inserida.
-     * 
-     * ou 
-     * 
-     * 2) criar dois TADs associados as árvores, um para árvore de 
+     *
+     * ou
+     *
+     * 2) criar dois TADs associados as árvores, um para árvore de
      *    busca não balanceada e outro para a árvore AVL (árvore de busca balanceada).
-     * 
+     *
      */
+
+    NoFila *wordsDictionary = NULL;
+    //double carregaDicionario = MyClock();
+
+    if (fDicionario == NULL){
+        printf("Nao foi possivel abrir o arquivo '%s'\n", nomeArqDicionario);
+        exit(EXIT_FAILURE);
+    }
+
+    int totalPalavras = 0;
 
     while(fscanf(fDicionario, "%s", palavra) == 1) {
         /**
          * Tarefa 1: Adicione a palavra na árvore
-         * 
+         *
          */
-        AVISO(Ainda não implemente a árvore);
         if (arvoreAVL) {
             // Utilize uma árvore AVL
-            ;
+            wordsDictionary = insereAVL(wordsDictionary, criaNo(palavra));
+            totalPalavras++;
         }
         else {
             //Utilize uma árvore binária de busca não balanceada
-            ;
+            wordsDictionary = insereNo(wordsDictionary, criaNo(palavra));
+            totalPalavras++;
         }
     }
 
@@ -95,10 +113,13 @@ int main(int argc, char *argv[]) {
     }
 
     /**
-     * Tarefa 2: Crie uma estrutura de dados que você acha mais adequada para 
+     * Tarefa 2: Crie uma estrutura de dados que você acha mais adequada para
      *           armazenar as palavras incorretas. Os requisitos do EP podem te ajudar
-     *           na escolha pela estrutura de dados. 
+     *           na escolha pela estrutura de dados.
     */
+
+    Fila *erro = criaFila();
+    int errosTotais = 0;
 
     while(fgets(linha, TAM_MAX_LINHA, fTexto) != NULL ) {
         /* Separa as palavras da linha */
@@ -116,17 +137,20 @@ int main(int argc, char *argv[]) {
             converteMinusculo(cpypalavra2);
 
             /**
-             * Tarefa 3: Verifique se a palavra 'cpypalavra' OU 'cpyplavra2' está na árvore que 
-             *           armazena o dicionário. Se estiver, apenas imprima-a. 
+             * Tarefa 3: Verifique se a palavra 'cpypalavra' OU 'cpyplavra2' está na árvore que
+             *           armazena o dicionário. Se estiver, apenas imprima-a.
              */
-            if ( false /* Refaça esse if, chamando as funções adequadas */)
+            if (buscaDicionario(wordsDictionary, cpypalavra) || buscaDicionario(wordsDictionary, cpypalavra2)){
                 printf("%s ", word);
+            }
             else {
                 imprimePalavraErrada(word);
                 /**
                  *  Tarefa 4: Adicione a palavra na estrutura de dados escolhida na Tarefa 2
-                 * 
+                 *
                  */
+                enqueue(erro, cpypalavra);
+                errosTotais++;
             }
 
             //Pega a próxima palavra
@@ -136,30 +160,52 @@ int main(int argc, char *argv[]) {
     }
     printf("\n\n");
     printf("----------------------------------------\n");
-    printf("-      Número de palavras lidas: %d\n", -1);
-    printf("- Número de palavras incorretas: %d\n", -1);
+    printf("-      Número de palavras lidas: %d\n", totalPalavras);
+    printf("- Número de palavras incorretas: %d\n", errosTotais);
     printf("Palavra(s) incorreta(s) e sugestão(ões)\n");
     printf("----------------------------------------\n");
-    AVISO(Ainda nao implementei a listagem das palavras incorretas e suas sugestoes);
+
     /**
      * Tarefa 5: Para cada palavra incorreta, imprima-a e percorra o dicionário em busca de sugestões.
-     * 
+     *
      */
+    char *wrongWord;
+    Fila *fSuggestions = criaFila();
+
+    while(!filaVazia(erro)){
+        wrongWord = front(erro);
+        imprimePalavraErrada(wrongWord);
+        if(strlen(wrongWord) <= 6){
+
+            comparaAVL(fSuggestions, wordsDictionary, wrongWord, 2);
+        }
+        else{
+
+            comparaAVL(fSuggestions, wordsDictionary, wrongWord, 3);
+        }
+        imprimeFilaSugestao(fSuggestions);
+        zerar(fSuggestions);
+        dequeue(erro);
+        printf("\n");
+    }
+
+    liberaFila(erro);
+    liberaFila(fSuggestions);
+    liberaFila(wordsDictionary);
 
     printf("----------------------------------------\n");
     printf("\033[1;32mTempo Total: %.10lf seg\n\n\033[00m", (MyClock() - inicioProg) / CLOCKS_PER_SEC);
-    
-    
+
     fclose(fDicionario);
     fclose(fTexto);
     return 0;
 }
 
 /**
- * @brief Imprime uma palavra errada em vermelho. Caracteres finais, que não sejam letras, 
+ * @brief Imprime uma palavra errada em vermelho. Caracteres finais, que não sejam letras,
  * não são impressos em vermelho.
- * 
- * @param palavra 
+ *
+ * @param palavra
  */
 void imprimePalavraErrada(String palavra) {
     int ultimaLetra = encontraPosicaoUltimaLetra(palavra);
