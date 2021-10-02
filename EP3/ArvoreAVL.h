@@ -1,34 +1,39 @@
+#ifndef EP3_ArvoreAVL_H
+#define EP3_ArvoreAVL_H
 #include "Fila.h"
 
-struct no{
-    char palavras;
-    struct no *esq;
-    struct no *dir;
+/**
+ * @brief Estrutura criada para as arvores AVL/BIN
+ *
+ */
+typedef struct noArvore{
+    char *palavras;
+    struct noArvore *esq;
+    struct noArvore *dir;
     int altura;
-};
+}NoArvore;
 
-typedef struct no No;
+NoArvore *criaNo(char *pWord);
 
-No *criaNo (char *palavras);
+void liberaNoAVL(NoArvore *r);
 
-void liberaNoAVL(No *r);
+int alturaAVL(NoArvore *r);
+int fatorBalanceamentoAVL(NoArvore *r);
 
-int alturaAVL(No *r);
-int fatorBalanceamentoAVL(No *r);
+NoArvore *rotacaoDir(NoArvore *A);
+NoArvore *rotacaoEsq(NoArvore *A);
 
-No *rotacaoDir(No *A);
-No *rotacaoEsq(No *A);
+NoArvore *insereAVL(NoArvore *r, NoArvore *novo);
+NoArvore *insereNo(NoArvore *r, NoArvore *novo);
 
-No *insereAVL(No *r, No *novo);
-No *insereNo(No *r, No *novo);
-
-int alturaArvoreBin(No *r);
-int fatorBalanceamentoArvoreBin(No *r);
+int alturaArvoreBin(NoArvore *r);
+int fatorBalanceamentoArvoreBin(NoArvore *r);
 
 void padding(char ch, int n);
 
-void comparaAVL(Fila *f, No *r, char *pWord, int tamanho);
-No *buscaDicionario(No *r, char pWord);
+void comparaAVL(Fila *f, NoArvore *r, char *pWord, int tamanho);
+int buscaDicionario(NoArvore *r, char *pWord);
 
-void imprimeArvoreAVL(No *root, int level);
+void imprimeArvoreAVL(NoArvore *root, int level);
 
+#endif

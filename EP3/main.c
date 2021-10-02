@@ -5,7 +5,6 @@
 #include <sys/time.h>
 #include <time.h>
 #include <math.h>
-
 #include "Util.h"
 #include "ArvoreAVL.h"
 #include "Fila.h"
@@ -78,15 +77,14 @@ int main(int argc, char *argv[]) {
      *
      */
 
-    NoFila *wordsDictionary = NULL;
-    //double carregaDicionario = MyClock();
 
     if (fDicionario == NULL){
         printf("Nao foi possivel abrir o arquivo '%s'\n", nomeArqDicionario);
         exit(EXIT_FAILURE);
     }
 
-    int totalPalavras = 0;
+    NoArvore *wordsDictionary = NULL;
+    int contPalavras = 0;
 
     while(fscanf(fDicionario, "%s", palavra) == 1) {
         /**
@@ -96,12 +94,12 @@ int main(int argc, char *argv[]) {
         if (arvoreAVL) {
             // Utilize uma árvore AVL
             wordsDictionary = insereAVL(wordsDictionary, criaNo(palavra));
-            totalPalavras++;
+            contPalavras++;
         }
         else {
             //Utilize uma árvore binária de busca não balanceada
             wordsDictionary = insereNo(wordsDictionary, criaNo(palavra));
-            totalPalavras++;
+            contPalavras++;
         }
     }
 
@@ -119,7 +117,7 @@ int main(int argc, char *argv[]) {
     */
 
     Fila *erro = criaFila();
-    int errosTotais = 0;
+    int contErros = 0;
 
     while(fgets(linha, TAM_MAX_LINHA, fTexto) != NULL ) {
         /* Separa as palavras da linha */
@@ -150,7 +148,7 @@ int main(int argc, char *argv[]) {
                  *
                  */
                 enqueue(erro, cpypalavra);
-                errosTotais++;
+                contErros++;
             }
 
             //Pega a próxima palavra
@@ -160,8 +158,8 @@ int main(int argc, char *argv[]) {
     }
     printf("\n\n");
     printf("----------------------------------------\n");
-    printf("-      Número de palavras lidas: %d\n", totalPalavras);
-    printf("- Número de palavras incorretas: %d\n", errosTotais);
+    printf("-      Número de palavras lidas: %d\n", contPalavras);
+    printf("- Número de palavras incorretas: %d\n", contErros);
     printf("Palavra(s) incorreta(s) e sugestão(ões)\n");
     printf("----------------------------------------\n");
 
@@ -191,7 +189,7 @@ int main(int argc, char *argv[]) {
 
     liberaFila(erro);
     liberaFila(fSuggestions);
-    liberaFila(wordsDictionary);
+    liberaNoAVL(wordsDictionary);
 
     printf("----------------------------------------\n");
     printf("\033[1;32mTempo Total: %.10lf seg\n\n\033[00m", (MyClock() - inicioProg) / CLOCKS_PER_SEC);

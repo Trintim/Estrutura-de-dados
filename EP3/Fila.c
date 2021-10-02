@@ -11,6 +11,7 @@ Fila *criaFila(){
     fila->inicio = NULL;
     fila->fim = NULL;
     fila->n = 0;
+    return fila;
 }
 
 int buscaFila(Fila *f, char *pWord){
@@ -19,7 +20,7 @@ int buscaFila(Fila *f, char *pWord){
 
         if(!filaVazia(f)){
 
-            NoFila *atual = f->inicio;
+            No *atual = f->inicio;
             while (atual){
 
                 if(!strcmp(pWord, atual->palavras)){
@@ -35,10 +36,10 @@ int buscaFila(Fila *f, char *pWord){
 
 void liberaFila(Fila *f){
 
-    NoFila *noAtual = f->inicio;
+    No *noAtual = f->inicio;
     while (noAtual){
 
-        NoFila *t = noAtual;
+        No *t = noAtual;
         noAtual = noAtual->proximo;
         free(t->palavras);
         free(t);
@@ -52,7 +53,7 @@ void enqueue(Fila *f, char *pWord){
         return;
     }
 
-    NoFila *novo = mallocSafe(sizeof(NoFila));
+    No *novo = mallocSafe(sizeof(No));
     novo->palavras = mallocSafe((strlen(pWord) + 1) * sizeof(char));
     strcpy(novo->palavras, pWord);
     novo->proximo = NULL;
@@ -77,7 +78,7 @@ void dequeue(Fila *f){
     }
     else{
 
-        NoFila *atual = f->inicio;
+        No *atual = f->inicio;
         f->inicio = f->inicio->proximo;
         free(atual->palavras);
         free(atual);
@@ -88,7 +89,7 @@ void dequeue(Fila *f){
 
 void imprimeFilaSugestao(Fila *f){
 
-    NoFila *atual = f->inicio;
+    No *atual = f->inicio;
     while (atual){
         if(!atual->proximo){
             printf("\033[1;32;40m%s\033[00m, ", atual->palavras);
@@ -107,17 +108,12 @@ int filaVazia(Fila *f){
 
 char *front(Fila *f){
 
-    if(filaVazia(f)){
-
-        printf("ERRO: Fila vazia");
-        return -1;
-    }
-    else return f->inicio->palavras;
+    return f->inicio->palavras;
 }
 
 void zerar(Fila *f){
 
-    while (filaVazia(f) == NULL){
+    while (!filaVazia(f)){
         dequeue(f);
     }
 }

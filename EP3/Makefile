@@ -4,8 +4,8 @@ EXECUTAVEL=EP3
 
 all: $(EXECUTAVEL)
 
-$(EXECUTAVEL): main.o Util.o 
-	gcc main.o Util.o $(LIBS) -o $(EXECUTAVEL)
+$(EXECUTAVEL): main.o Util.o Fila.o ArvoreAVL.o
+	gcc main.o Util.o ArvoreAVL.o Fila.o $(LIBS) -o $(EXECUTAVEL)
 
 main.o: main.c
 	gcc $(CFLAGS) -c main.c
@@ -13,15 +13,24 @@ main.o: main.c
 Util.o: Util.c
 	gcc $(CFLAGS) -c Util.c
 
-clean: 
+Fila.o: Fila.c
+	gcc $(CFLAGS) -c Fila.c
+
+ArvoreAVL.o: ArvoreAVL.c
+	gcc $(CFLAGS) -c ArvoreAVL.c
+
+clean:
 	rm -rf *.o $(EXECUTAVEL)
 
 # Para executar com a árvore AVL adicione um '-avl':
-# run: $(EXECUTAVEL) 
+# run: $(EXECUTAVEL)
 # 	./$(EXECUTAVEL) -d Dicionario.txt -t TextoEP3.txt -avl
-	
-run: $(EXECUTAVEL) 
+
+run: $(EXECUTAVEL)
 	./$(EXECUTAVEL) -d Dicionario.txt -t TextoEP3.txt
+
+run1: $(EXECUTAVEL)
+	./$(EXECUTAVEL) -d teste.txt -t TextoTeste.txt
 
 memcheck: $(EXECUTAVEL)
 	valgrind --tool=memcheck --leak-check=full ./$(EXECUTAVEL) -d Dicionario.txt -t TextoEP3.txt

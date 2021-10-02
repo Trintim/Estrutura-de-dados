@@ -6,22 +6,25 @@
 #include "ArvoreAVL.h"
 #include "Fila.h"
 
+
 int max(int a, int b){
     return (a > b) ? a : b;
 }
 
-No *criaNo(char *palavras){
+NoArvore *criaNo(char *pWord){
 
-    No *novoNo = malloc(sizeof(No));
-    char *palavra = mallocSafe(sizeof(char) * (strlen(palavras) + 1));
-    strcpy(palavra, palavras);
+    NoArvore *novoNo = malloc(sizeof(NoArvore));
+    char *palavra = mallocSafe(sizeof(char) * (strlen(pWord) + 1));
+    strcpy(palavra, pWord);
     novoNo->dir = NULL;
     novoNo->esq = NULL;
+    novoNo->altura = 0;
     return novoNo;
 }
 
-void liberaNoAVL(No *r){
-    if(r != NULL){
+void liberaNoAVL(NoArvore *r){
+
+    if(r){
         liberaNoAVL(r->esq);
         liberaNoAVL(r->dir);
         free(r->palavras);
@@ -29,7 +32,7 @@ void liberaNoAVL(No *r){
     }
 }
 
-int alturaAVL(No *r){
+int alturaAVL(NoArvore *r){
 
     if(!r){
         return -1;
@@ -37,12 +40,12 @@ int alturaAVL(No *r){
     return r->altura;
 }
 
-int fatorBalanceamentoAVL(No *r){
+int fatorBalanceamentoAVL(NoArvore *r){
 
     return alturaAVL(r->esq) - alturaAVL(r->dir);
 }
 
-No *insereNo(No *r, No *novo){
+NoArvore *insereNo(NoArvore *r, NoArvore *novo){
 
     if(r == NULL){
 
@@ -63,11 +66,11 @@ No *insereNo(No *r, No *novo){
  * @brief
  * Rotação da arvore para direita
  * @param A
- * @return No*
+ * @return NoArvore*
  */
-No *rotacaoDir(No *A){
+NoArvore *rotacaoDir(NoArvore *A){
 
-    No *B = A->esq;
+    NoArvore *B = A->esq;
 
     //Realiza Rotação para Direita
     A->esq = B->dir;
@@ -83,11 +86,11 @@ No *rotacaoDir(No *A){
  * @brief
  * Rotação da arvore para esquerda
  * @param A
- * @return No*
+ * @return NoArvore*
  */
-No *rotacaoEsq(No *A){
+NoArvore *rotacaoEsq(NoArvore *A){
 
-    No *B = A->dir;
+    NoArvore *B = A->dir;
 
     //Realiza Rotação para Direita
     A->esq = B->esq;
@@ -104,15 +107,15 @@ No *rotacaoEsq(No *A){
  * Insere o no AVL / atualização da altura e balanceamento da arvore
  * @param r
  * @param novo
- * @return No*
+ * @return NoArvore*
  */
-No *insereAVL(No *r, No *novo){
+NoArvore *insereAVL(NoArvore *r, NoArvore *novo){
 
     if(r == NULL){
 
         return novo;
     }
-    if(strcpy(r->palavras, novo->palavras)){
+    if(strcmp(r->palavras, novo->palavras) > 0){
 
         r->esq  = insereAVL(r->esq, novo);
     }
@@ -147,7 +150,7 @@ No *insereAVL(No *r, No *novo){
     return r;
 }
 
-int alturaArvoreBin(No *r){
+int alturaArvoreBin(NoArvore *r){
 
     if(r == NULL){
 
@@ -166,7 +169,7 @@ int alturaArvoreBin(No *r){
     }
 }
 
-int fatorBalanceamentoArvoreBin(No *r){
+int fatorBalanceamentoArvoreBin(NoArvore *r){
 
     return alturaArvoreBin(r->esq) - alturaArvoreBin(r->dir);
 }
@@ -179,34 +182,39 @@ void padding(char ch, int n){
     }
 }
 
-No *buscaDicionario(No *r, char pWord){
+int buscaDicionario(NoArvore *r, char *pWord){
 
-    if(r == NULL || strcpy(r->palavras, pWord) == 0){
-        return r;
+    if(r == NULL){
+        return 0;
     }
-    else if(strcpy(r->palavras, pWord) > 0){
-        return buscaDicionario(r->esq, pWord);
+    else if(!strcmp(r->palavras, pWord)){
+        return 1;
+    }
+    else if(buscaDicionario(r->esq, pWord)){
+        return 1;
     }
     else{
         return buscaDicionario(r->dir, pWord);
     }
 }
 
-void comparaAVL(Fila *f, No *r, char *pWord, int tamanho){
+void comparaAVL(Fila *f, NoArvore *r, char *pWord, int tamanho){
 
     if(r == NULL){
         return;
     }
+
     else if(strlen(pWord) == strlen(r->palavras)){
         if(distanciaEdicao(pWord, r->palavras) <= tamanho){
             enqueue(f, r->palavras);
         }
     }
+
     comparaAVL(f, r->dir, pWord, tamanho);
     comparaAVL(f, r->esq, pWord, tamanho);
 }
 
-void imprimeArvoreAVL(No *root, int level){
+void imprimeArvoreAVL(NoArvore *root, int level){
 
     if(root == NULL){
 

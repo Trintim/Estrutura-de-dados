@@ -1,11 +1,22 @@
+#ifndef EP3_Fila_H
+#define EP3_Fila_H
+
+/**
+ * @brief No de gerenciamento das filas
+ *
+ */
 typedef struct no{
     struct no *proximo;
     char *palavras;
-}NoFila;
+}No;
 
+/**
+ * @brief Fila para ordenação
+ *
+ */
 typedef struct fila{
-    NoFila *inicio;
-    NoFila *fim;
+    No *inicio;
+    No *fim;
     int n;
 }Fila;
 
@@ -19,3 +30,5 @@ void imprimeFilaSugestao(Fila *f);
 int filaVazia(Fila *f);
 char *front(Fila *f);
 void zerar(Fila *f);
+
+#endif
