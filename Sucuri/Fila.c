@@ -3,6 +3,20 @@
 
 #include "Fila.h"
 
+/**
+ * @brief No de gerenciamento das filas
+ *
+ */
+struct noFila{
+    struct noFila *proximo;
+    char *palavras;
+};
+
+/**
+ * @brief Fila para ordenação
+ *
+ */
+
 struct fila {
     Objeto *inicio;
     Objeto *fim;
