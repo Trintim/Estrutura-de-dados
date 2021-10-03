@@ -7,24 +7,25 @@
  */
 typedef struct no No;
 
-No* criaNo(char* palavra);
+No* criaNo(char *pWord);
 
-void liberaArvore(No* raiz);
+void liberaNo(No *r);
 
-int pertence(No* raiz, char* palavra);
+int buscaDicionario(No *r, char *pWord);
 
-No* insereNo(No* raiz, No* novo);
+No* insereNoArvBin(No *r, No *novo);
 
-No* insereNoAVL(No* raiz, No* novo);
+No* insereAVL(No *r, No *novo);
 
-void imprimeArvore(No* raiz, int level);
+void imprimeArvoreAVL(No *noR, int level);
 
-void achaSugestoes(Fila* sugestoes, No* raiz, char* palavra, int range);
+void comparaFazSugestao(Fila* f, No *r, char *pWord, int tam);
 
-int fatorBalanceamento(No* raiz);
+int fatorBalanceamentoAVL(No *r);
 
-int fatorBalanceamentoABB(No* raiz);
+int fatorBalanceamentoArvoreBin(No *r);
 
-int altura(No* raiz);
+int alturaAVL(No *r);
 
-int alturaABB(No* raiz);
+int alturaArvoreBin(No *r);
+
