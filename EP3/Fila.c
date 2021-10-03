@@ -1,115 +1,132 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "Fila.h"
 #include "Util.h"
 
-
 struct no{
-    struct no* proximo;
-    char* palavra;
+
+    char *palavras;
+    struct no *proximo;
+
 };
 
 struct fila{
-    No* inicio;
-    No* fim;
+    No *inicio;
+    No *fim;
     int n;
 };
 
-Fila* criaFila(){
-    Fila* novaFila = mallocSafe(sizeof(Fila));
-    novaFila->inicio = novaFila->fim = NULL;
-    novaFila->n = 0;
-    return novaFila;
+Fila *criaFila(){
+
+    Fila *fila = mallocSafe(sizeof(Fila));
+    fila->inicio = NULL;
+    fila->fim = NULL;
+    fila->n = 0;
+    return fila;
 }
 
-void liberaFila(Fila* fila){
-    No* atual = fila->inicio;
-    while(atual){
-        No* auxiliar = atual;
-        atual = atual->proximo;
-        free(auxiliar->palavra);
-        free(auxiliar);
+void liberaFila(Fila *f){
+
+    No *noAtual = f->inicio;
+    while (noAtual){
+
+        No *t = noAtual;
+        noAtual = noAtual->proximo;
+        free(t->palavras);
+        free(t);
     }
-    free(fila);
+    free(f);
 }
 
-int contemFila(Fila* fila, char* palavra){
-    No* atual = fila->inicio;
-    while(atual){
-        if (!strcmp(palavra, atual->palavra))
+int buscarFila(Fila *f, char* pWord){
+
+    No *atual = f->inicio;
+    while (atual){
+
+        if(!strcmp(pWord, atual->palavras)){
             return 1;
+        }
+
         atual = atual->proximo;
     }
+
     return 0;
 }
 
-void enqueue(Fila* fila, char* palavra){
-    if (contemFila(fila, palavra))
+void enqueue(Fila *f, char *pWord){
+
+    if(buscarFila(f, pWord)){
         return;
-    No* novo = mallocSafe(sizeof(No));
-    novo->palavra = mallocSafe((strlen(palavra) + 1) * sizeof(char));
-    strcpy(novo->palavra, palavra);
+    }
+
+    No *novo = mallocSafe(sizeof(No));
+    novo->palavras = mallocSafe((strlen(pWord) + 1) * sizeof(char));
+    strcpy(novo->palavras, pWord);
     novo->proximo = NULL;
-    if (!fila->inicio)
-        fila->inicio = fila->fim = novo;
-    else{
-        fila->fim->proximo = novo;
-        fila->fim = novo;
+
+    if(f->inicio == NULL){
+
+        f->inicio = novo;
+        f->fim = novo;
     }
-    fila->n++;
+    else{
+
+        f->fim->proximo = novo;
+        f->fim = novo;
+    }
+    f->n++;
 }
 
-void dequeue(Fila* fila){
-    if (!fila->inicio)
+void dequeue(Fila *f){
+
+    if (f->inicio == NULL){
+
         return;
+    }
     else{
-        No* aux = fila->inicio;
-        fila->inicio = fila->inicio->proximo;
-        free(aux->palavra);
-        free(aux);
-        aux = NULL;
+
+        No *tmp = f->inicio;
+        f->inicio = f->inicio->proximo;
+        free(tmp->palavras);
+        free(tmp);
+        tmp = NULL;
     }
-    fila->n--;
+    f->n--;
 }
 
-void esvaziaFila(Fila* fila){
-    while(!filaVazia(fila)){
-        dequeue(fila);
-    }
-}
+void imprimeSugestao(Fila *f){
 
-char* frenteFila(Fila* fila){
-    return fila->inicio->palavra;
-}
-
-char* fundofila(Fila* fila){
-    return fila->fim->palavra;
-}
-
-int filaVazia(Fila* fila){
-    return fila->n == 0;
-}
-
-void imprimeFilaVerde(Fila* fila){
-    No* atual = fila->inicio;
+    No *atual = f->inicio;
     while(atual){
-        if (!atual->proximo)
-            printf("\033[1;32m%s.\033[00m", atual->palavra);
-        else
-            printf("\033[1;32m%s, \033[00m", atual->palavra);
+        if (atual->proximo == NULL){
+
+            printf("\033[1;32m%s.\033[00m", atual->palavras);
+        }
+        else{
+            printf("\033[1;32m%s, \033[00m", atual->palavras);
+        }
         atual = atual->proximo;
     }
 }
 
-void imprimeFilaRoxo(Fila* fila){
-    No* atual = fila->inicio;
-    while(atual){
-        printf("\033[1;35m%s, \033[00m", atual->palavra);
-        atual = atual->proximo;
+int filaVazia(Fila *f){
+
+    return f->n == 0;
+}
+
+void esvaziaFila(Fila *f){
+
+    while(!filaVazia(f)){
+        dequeue(f);
     }
 }
 
+char *front(Fila *f){
+
+    return f->inicio->palavras;
+}
+
+char *back(Fila *f){
+
+    return f->fim->palavras;
+}
 
 

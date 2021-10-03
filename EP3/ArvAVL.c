@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
 #include "Util.h"
 #include "ArvAVL.h"
 #include "Fila.h"
@@ -204,22 +200,6 @@ void padding(char ch, int n){
     }
 }
 
-void imprimeArvoreAVL(No *noR, int level){
-
-    if(noR == NULL){
-
-        padding('\t', level);
-        puts("~");
-    }
-    else{
-
-        imprimeArvoreAVL(noR->dir, level + 1);
-        padding('\t', level);
-        printf("%s\n", noR->palavras);
-        imprimeArvoreAVL(noR->esq, level + 1);
-    }
-}
-
 void comparaFazSugestao(Fila* f, No *r, char* pWord, int tam){
 
     if(r == NULL){
@@ -234,4 +214,20 @@ void comparaFazSugestao(Fila* f, No *r, char* pWord, int tam){
 
     comparaFazSugestao(f, r->dir, pWord, tam);
     comparaFazSugestao(f, r->esq, pWord, tam);
+}
+
+void imprimeArvoreAVL(No *noR, int level){
+
+    if(noR == NULL){
+
+        padding('\t', level);
+        puts("~");
+    }
+    else{
+
+        imprimeArvoreAVL(noR->dir, level + 1);
+        padding('\t', level);
+        printf("%s\n", noR->palavras);
+        imprimeArvoreAVL(noR->esq, level + 1);
+    }
 }

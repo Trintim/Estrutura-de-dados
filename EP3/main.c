@@ -5,7 +5,6 @@
 #include <sys/time.h>
 #include <time.h>
 #include <math.h>
-
 #include "Util.h"
 #include "ArvAVL.h"
 #include "Fila.h"
@@ -21,6 +20,7 @@ const char *whiteSpace = " \t\v\f\n";
 void imprimePalavraErrada(String palavra);
 
 int main(int argc, char *argv[]) {
+
     double inicioProg = MyClock();
     double inicioImportDic;
     double inicioSugestoes;
@@ -79,40 +79,25 @@ int main(int argc, char *argv[]) {
      *    busca não balanceada e outro para a árvore AVL (árvore de busca balanceada).
      *
      */
-    inicioImportDic = MyClock();
-    No* dicionario = NULL;
-    int qntPalavras = 0;
+
+    No* wordsDic = NULL;
+    int contWords = 0;
+
     while(fscanf(fDicionario, "%s", palavra) == 1) {
         /**
          * Tarefa 1: Adicione a palavra na árvore
          *
          */
-        AVISO(Ainda não implemente a árvore);
+
         if (arvoreAVL) {
-            dicionario = insereNoAVL(dicionario, criaNo(palavra));
-            qntPalavras++;
+            wordsDic = insereAVL(wordsDic, criaNo(palavra));
+            contWords++;
         }
         else {
-            dicionario = insereNo(dicionario, criaNo(palavra));
-            qntPalavras++;
+            wordsDic = insereNoArvBin(wordsDic, criaNo(palavra));
+            contWords++;
         }
     }
-
-    /* imprime informações uteis sobre a árvore */
-    printf("%d palavras importadas.\n", qntPalavras);
-    printf("\033[1;32mTempo de Importação do Dicionário: %.10lf seg\n\n\033[00m", (MyClock() - inicioImportDic) / CLOCKS_PER_SEC);
-    printf("------------------------------------------------------\n");
-
-
-    if (arvoreAVL){
-        printf("\033[1;35mFator de Balanceamento da Árvore: %d\n\n\033[00m", fatorBalanceamento(dicionario));
-        printf("\033[1;35mAltura da Árvore: %d\n\n\033[00m", altura(dicionario));
-    }
-    else{
-        //printf("\033[1;35mFator de Balanceamento da Árvore: %d\n\n\033[00m", fatorBalanceamentoABB(dicionario));
-        //printf("\033[1;35mAltura da Árvore: %d\n\n\033[00m", alturaABB(dicionario));
-    }
-    printf("------------------------------------------------------\n");
 
     /* Carrega o texto */
     fTexto = fopen(nomeArqTexto, "r");
@@ -127,8 +112,8 @@ int main(int argc, char *argv[]) {
      *           na escolha pela estrutura de dados.
     */
 
-    Fila* erros = criaFila();
-    int qntErros = 0;
+    Fila *erro = criaFila();
+    int contErro = 0;
 
     while(fgets(linha, TAM_MAX_LINHA, fTexto) != NULL ) {
         /* Separa as palavras da linha */
@@ -149,17 +134,23 @@ int main(int argc, char *argv[]) {
              * Tarefa 3: Verifique se a palavra 'cpypalavra' OU 'cpyplavra2' está na árvore que
              *           armazena o dicionário. Se estiver, apenas imprima-a.
              */
-            if ( pertence(dicionario, cpypalavra) || pertence(dicionario, cpypalavra2))
+            if (buscaDicionario(wordsDic, cpypalavra) || buscaDicionario(wordsDic, cpypalavra2)){
+
                 printf("%s ", word);
+            }
             else {
+
+                //encontraPosicaoUltimaLetra(word);
+                //removePontuacao(word);
                 imprimePalavraErrada(word);
+
                 /**
                  *  Tarefa 4: Adicione a palavra na estrutura de dados escolhida na Tarefa 2
                  *
                  */
                 //nTAREFA 3: Adicione a palavra em alguma estrutura de dados de sua preferência
-                enqueue(erros, cpypalavra);
-                qntErros++;
+                enqueue(erro, cpypalavra);
+                contErro++;
             }
 
             //Pega a próxima palavra
@@ -169,34 +160,40 @@ int main(int argc, char *argv[]) {
     }
     printf("\n\n");
     printf("----------------------------------------\n");
-    printf("-      Número de palavras lidas: %d\n", qntPalavras);
-    printf("- Número de palavras incorretas: %d\n", qntErros);
+    printf("-      Número de palavras lidas: %d\n", contWords);
+    printf("- Número de palavras incorretas: %d\n", contErro);
     printf("Palavra(s) incorreta(s) e sugestão(ões)\n");
     printf("----------------------------------------\n");
-    inicioSugestoes = MyClock();
-    Fila* sugestoes = criaFila();
-    while(!filaVazia(erros)){
-        char* palavraErrada = frenteFila(erros);
-        imprimePalavraErrada(palavraErrada);
-        if (strlen(palavraErrada) <= 7)
-            achaSugestoes(sugestoes, dicionario, palavraErrada, 2);
-        else
-            achaSugestoes(sugestoes, dicionario, palavraErrada, 3);
 
-        imprimeFilaVerde(sugestoes);
-        esvaziaFila(sugestoes);
-        dequeue(erros);
-        printf("\n");
-    }
-    printf("Quantidade de erros encontrados: %d", qntErros);
-    printf("\033[1;35mTempo para gerar as sugestões: %.10lf seg\n\n\033[00m", (MyClock() - inicioSugestoes) / CLOCKS_PER_SEC);
-    liberaFila(erros);
-    liberaFila(sugestoes);
-    liberaArvore(dicionario);
+
     /**
      * Tarefa 5: Para cada palavra incorreta, imprima-a e percorra o dicionário em busca de sugestões.
      *
      */
+
+    Fila *opcoes = criaFila();
+
+    while(!filaVazia(erro)){
+        char* wrongWords = front(erro);
+        printf("\033[1;31m%s\033[00m ", wrongWords);
+        //imprimePalavraErrada(wrongWords);
+        if (strlen(wrongWords) <= 7){
+
+            comparaFazSugestao(opcoes, wordsDic, wrongWords, 2);
+        }else{
+
+            comparaFazSugestao(opcoes, wordsDic, wrongWords, 3);
+        }
+
+        imprimeSugestao(opcoes);
+        esvaziaFila(opcoes);
+        dequeue(erro);
+        printf("\n");
+    }
+
+    liberaFila(erro);
+    liberaFila(opcoes);
+    liberaNo(wordsDic);
 
     printf("----------------------------------------\n");
     printf("\033[1;32mTempo Total: %.10lf seg\n\n\033[00m", (MyClock() - inicioProg) / CLOCKS_PER_SEC);
@@ -220,7 +217,7 @@ void imprimePalavraErrada(String palavra) {
     for(int i = 0; i <= ultimaLetra; i++)
         printf("%c", palavra[i]);
     printf("\033[00m");
-    for (int i = ultimaLetra + 1; i < tamanho; i++)
+    for (int i = ultimaLetra +1; i < tamanho; i++)
         printf("%c", palavra[i]);
     printf(" ");
 }

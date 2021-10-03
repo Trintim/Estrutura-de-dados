@@ -1,31 +1,26 @@
+#ifndef EP3_AvrAVL_H
+#define EP3_AvrAVL_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include "Fila.h"
 
-/**
- * @brief Arvore daqui
- *
- */
 typedef struct no No;
 
-No* criaNo(char *pWord);
-
+No *criaNo(char* pWord);
 void liberaNo(No *r);
-
-int buscaDicionario(No *r, char *pWord);
-
-No* insereNoArvBin(No *r, No *novo);
-
-No* insereAVL(No *r, No *novo);
-
-void imprimeArvoreAVL(No *noR, int level);
-
-void comparaFazSugestao(Fila* f, No *r, char *pWord, int tam);
-
-int fatorBalanceamentoAVL(No *r);
-
-int fatorBalanceamentoArvoreBin(No *r);
-
 int alturaAVL(No *r);
-
-int alturaArvoreBin(No *r);
-
+int fatorBalanceamentoAVL(No *r);
+No *insereNoArvBin(No *r, No* novo);
+No *rotacaoDir(No *A);
+No *rotacaoEsq(No *A);
+int alturaArvoreBin(No *r) ;
+int fatorBalanceamentoArvoreBin(No *r);
+No *insereAVL(No *r, No* novo);
+int buscaDicionario(No *r, char *pWord);
+void padding(char ch, int n);
+void comparaFazSugestao(Fila* f, No *r, char* pWord, int tam);
+void imprimeArvoreAVL(No *noR, int level);
+#endif

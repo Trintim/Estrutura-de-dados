@@ -1,3 +1,8 @@
+#ifndef EP3_FILA_H
+#define EP3_FILA_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 /**
  * @brief Fila no
  *
@@ -9,24 +14,14 @@ typedef struct no No;
  */
 typedef struct fila Fila;
 
-Fila* criaFila();
-
-void liberaFila(Fila* fila);
-
-void enqueue(Fila* fila, char* palavra);
-
-void dequeue(Fila* fila);
-
-void esvaziaFila(Fila* fila);
-
-char* frenteFila(Fila* fila);
-
-char* fundoFila(Fila* fila);
-
-int filaVazia(Fila* fila);
-
-void imprimeFilaVerde(Fila* fila);
-
-void imprimeFilaRoxo(Fila* fila);
-
-int contemFila(Fila* fila, char* palavra);
+Fila *criaFila();
+void liberaFila(Fila *f);
+int buscarFila(Fila *f, char* pWord);
+void enqueue(Fila *f, char *pWord);
+void dequeue(Fila *f);
+void imprimeSugestao(Fila *f);
+int filaVazia(Fila *f);
+void esvaziaFila(Fila *f);
+char *front(Fila *f);
+char *back(Fila *f);
+#endif
