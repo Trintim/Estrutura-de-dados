@@ -174,7 +174,8 @@ int main(int argc, char *argv[]) {
     Fila *opcoes = criaFila();
 
     while(!filaVazia(erro)){
-        char* wrongWords = front(erro);
+
+        char *wrongWords = front(erro);
         printf("\033[1;31m%s\033[00m ", wrongWords);
         //imprimePalavraErrada(wrongWords);
         if (strlen(wrongWords) <= 7){
