@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "Fila.h"
 #include "Util.h"
 
@@ -44,7 +47,6 @@ int buscarFila(Fila *f, char* pWord){
         if(!strcmp(pWord, atual->palavras)){
             return 1;
         }
-
         atual = atual->proximo;
     }
 

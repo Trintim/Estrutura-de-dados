@@ -1,8 +1,3 @@
-#ifndef EP3_FILA_H
-#define EP3_FILA_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 /**
  * @brief Fila no
  *
@@ -24,4 +19,14 @@ int filaVazia(Fila *f);
 void esvaziaFila(Fila *f);
 char *front(Fila *f);
 char *back(Fila *f);
-#endif
+
+
+/**
+ * @brief Aqui estão as funções que foram utilizadas para armazenar os dados dos textos inserido
+ *
+ */
+/*
+
+criaFila, liberaFila, buscarFila, enqueue, dequeue, imprimeSugestao, filaVazia, esvaziaFil, front, back
+
+*/

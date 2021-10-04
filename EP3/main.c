@@ -99,6 +99,16 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if (arvoreAVL){
+        printf("\033[1;35mFator de Balanceamento da Árvore: %d\n\n\033[00m", fatorBalanceamentoAVL(wordsDic));
+        printf("\033[1;35mAltura da Árvore: %d\n\n\033[00m", alturaAVL(wordsDic));
+    }
+    else{
+        //printf("\033[1;35mFator de Balanceamento da Árvore: %d\n\n\033[00m", fatorBalanceamentoABB(dicionario));
+        //printf("\033[1;35mAltura da Árvore: %d\n\n\033[00m", alturaABB(dicionario));
+    }
+    printf("------------------------------------------------------\n");
+
     /* Carrega o texto */
     fTexto = fopen(nomeArqTexto, "r");
     if (fTexto == NULL) {

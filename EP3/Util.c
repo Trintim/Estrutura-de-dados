@@ -9,10 +9,10 @@
 
 /**
  * @brief Retorna o menor entre dois valores
- *
- * @param a
- * @param b
- * @return int
+ * 
+ * @param a 
+ * @param b 
+ * @return int 
  */
 int min(int a, int b) {
     return (a < b ? a : b);
@@ -20,25 +20,25 @@ int min(int a, int b) {
 
 /**
  * @brief Retorna o menor entre três valores
- *
- * @param a
- * @param b
- * @param c
- * @return int
+ * 
+ * @param a 
+ * @param b 
+ * @param c 
+ * @return int 
  */
 int min3(int a, int b, int c) {
     return min(a, min(b, c));
 }
 
 /**
- * @brief Distância de edição (Edit Distance)
+ * @brief Distância de edição (Edit Distance) 
  * Implementação baseada em:
  * https://www.geeksforgeeks.org/edit-distance-dp-5/
- * https://web.stanford.edu/class/cs124/lec/med.pdf
- *
- * @param a
- * @param b
- * @return int
+ * https://web.stanford.edu/class/cs124/lec/med.pdf 
+ * 
+ * @param a 
+ * @param b 
+ * @return int 
  */
 int distanciaEdicao(char *a, char *b) {
     int m = strlen(a), n = strlen(b);
@@ -75,10 +75,10 @@ void *mallocSafe(size_t nbytes) {
 }
 
 /**
- * @brief Função auxiliar para contabiliar o tempo.
+ * @brief Função auxiliar para contabiliar o tempo. 
  * Retorna o instante de tempo atual.
- *
- * @return double
+ * 
+ * @return double 
  */
 double MyClock() {
     struct timeval tv;
@@ -88,8 +88,8 @@ double MyClock() {
 
 /**
  * @brief Função auxiliar para remover as pontuação das palavras
- *
- * @param palavra
+ * 
+ * @param palavra 
  */
 void removePontuacao(String palavra) {
     int count = 0;
@@ -101,8 +101,8 @@ void removePontuacao(String palavra) {
 
 /**
  * @brief Converte o string para caracteres em minúsculo
- *
- * @param str
+ * 
+ * @param str 
  */
 void converteMinusculo(String str) {
     for(int i = 0; str[i]; i++){
@@ -112,9 +112,9 @@ void converteMinusculo(String str) {
 
 /**
  * @brief Retornar a posição da última letra do string
- *
- * @param str
- * @return int
+ * 
+ * @param str 
+ * @return int 
  */
 int encontraPosicaoUltimaLetra(String str) {
     for (int i = strlen(str) - 1; i >= 0; i--)

@@ -26,7 +26,7 @@ memcheck: $(EXECUTAVEL)
 	valgrind --tool=memcheck --leak-check=full ./$(EXECUTAVEL) -d Dicionario.txt -t TextoExemplo.txt
 
 run: $(EXECUTAVEL)
-	./$(EXECUTAVEL) -d 100000.txt -t Historia.txt -avl
+	./$(EXECUTAVEL) -d Dicionario.txt -t TextoExemplo.txt -avl
 
 run1: $(EXECUTAVEL)
 	./$(EXECUTAVEL) -d 100000.txt -t Movimento.txt -avl
@@ -39,5 +39,8 @@ run3: $(EXECUTAVEL)
 
 run4: $(EXECUTAVEL)
 	./$(EXECUTAVEL) -d 100000.txt -t texto.txt -avl
+
+run22: $(EXECUTAVEL)
+	./$(EXECUTAVEL) -d Dicionario2.txt -t TextoExemplo2.txt -avl
 
 
