@@ -5,10 +5,9 @@
 #include <sys/time.h>
 #include <time.h>
 #include <math.h>
-#include "Util.h"
 #include "ArvoresBinAvl.h"
 #include "Fila.h"
-
+#include "Util.h"
 
 /* Número máximo de caracteres em uma linha */
 #define TAM_MAX_LINHA 1024
@@ -53,7 +52,6 @@ int main(int argc, char *argv[]) {
 
 
     FILE *fDicionario, *fTexto;
-    printf("tacarregando aqui");
     /* Carrega o dicionário */
     fDicionario = fopen(nomeArqDicionario, "r");
     if (fDicionario == NULL) {
@@ -61,9 +59,27 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    No *wordsDic = NULL;
-    int contWords = 0;
+    /**
+     * Tarefa 0: Crie a árvore binária de busca que será utilizada
+     *           para armazenar as palávras do dicionário.
+     *
+     * Para essa parte você pode optar por:
+     *
+     * 1) criar um único TAD que gerencia a árvore binária. A função de
+     *    criação/inicialização recebe um parâmetro que indica se a árvore
+     *    é ou não balanceada. Internamente no TAD, você decide se precisa/deve
+     *    ou não fazer o balanceamento quando uma nova palavra for inserida.
+     *
+     * ou
+     *
+     * 2) criar dois TADs associados as árvores, um para árvore de
+     *    busca não balanceada e outro para a árvore AVL (árvore de busca balanceada).
+     *
+     */
 
+    No* wordsDic = NULL;
+    int contWords = 0;
+    //double contArvores = MyClock();
     while(fscanf(fDicionario, "%s", palavra) == 1) {
         /**
          * Tarefa 1: Adicione a palavra na árvore
@@ -86,6 +102,8 @@ int main(int argc, char *argv[]) {
         printf("Nao foi possivel abrir o arquivo '%s'\n", nomeArqTexto);
         exit(EXIT_FAILURE);
     }
+    //printf("------------------------Tempo Para carregar a arvore--------------------------------------------\n");
+    //printf("\033[1;32mTempo: %.10lf seg\n\n\033[00m", (MyClock() - contArvores) / CLOCKS_PER_SEC);
 
     /**
      * Tarefa 2: Crie uma estrutura de dados que você acha mais adequada para
@@ -95,6 +113,7 @@ int main(int argc, char *argv[]) {
 
     Fila *erro = criaFila();
     int contErro = 0;
+    //double contBuscaErradas = MyClock();
     while(fgets(linha, TAM_MAX_LINHA, fTexto) != NULL ) {
         /* Separa as palavras da linha */
         char *word = strtok(linha, whiteSpace);
@@ -119,11 +138,11 @@ int main(int argc, char *argv[]) {
                 printf("%s ", word);
             }
             else {
-                printf("\033[1;31m%s\033[00m ", word);
+
                 //encontraPosicaoUltimaLetra(word);
                 //removePontuacao(word);
-                //imprimePalavraErrada(word);
-
+                imprimePalavraErrada(word);
+                //printf("\033[1;31m%s\033[00m: ", word);
                 /**
                  *  Tarefa 4: Adicione a palavra na estrutura de dados escolhida na Tarefa 2
                  *
@@ -138,6 +157,11 @@ int main(int argc, char *argv[]) {
         }
         printf("\n");
     }
+
+    //printf("------------------------Tempo Para busca erros--------------------------------------------\n");
+    //printf("\033[1;32mTempo: %.10lf seg\n\n\033[00m", (MyClock() - contBuscaErradas) / CLOCKS_PER_SEC);
+
+
     printf("\n\n");
     printf("----------------------------------------\n");
     printf("-      Número de palavras lidas: %d\n", contWords);
@@ -152,11 +176,11 @@ int main(int argc, char *argv[]) {
      */
 
     Fila *opcoes = criaFila();
-
+    //double contSugestoes = MyClock();
     while(!filaVazia(erro)){
 
         char *wrongWords = front(erro);
-        printf("\033[1;31m%s\033[00m ", wrongWords);
+        printf("\033[1;31m%s\033[00m: ", wrongWords);
         //imprimePalavraErrada(wrongWords);
         if (strlen(wrongWords) <= 7){
 
@@ -171,6 +195,10 @@ int main(int argc, char *argv[]) {
         dequeue(erro);
         printf("\n");
     }
+
+    //printf("------------------------Tempo Para Sugestões--------------------------------------------\n");
+    //printf("\033[1;32mTempo: %.10lf seg\n\n\033[00m", (MyClock() - contArvores) / CLOCKS_PER_SEC);
+
 
     liberaFila(erro);
     liberaFila(opcoes);

@@ -4,6 +4,7 @@
         "fila.h": "c",
         "stdio.h": "c",
         "math.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "arvoresbinavl.h": "c"
     }
 }
